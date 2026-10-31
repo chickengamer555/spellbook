@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spellbook · D&amp;D 5e spells</title>
+  <meta name="description" content="Every D&amp;D 5e SRD spell: filter by class, level and school, search, and read each spell in a table or as cards.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%231b6c80'/%3E%3Cpath d='M12 4l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="./assets/index-n4Kvny9F.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CtbPlsxQ.css">
+</head>
+<body>
+  <div class="app" data-verify-unit="spellbook">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="filters-open" type="button" aria-label="Open filters" aria-controls="sidebar" aria-expanded="false">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <a class="brand" href="#" id="brand">
+        <svg class="mark" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <rect width="24" height="24" rx="6" fill="var(--accent)"/>
+          <path d="M12 4l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z" fill="#fff"/>
+        </svg>
+        <span>Spellbook</span>
+      </a>
+      <label class="search">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span class="visually-hidden">Search spells</span>
+        <input id="q" type="search" placeholder="Search spells, effects, damage types" autocomplete="off" spellcheck="false">
+        <kbd aria-hidden="true">/</kbd>
+      </label>
+      <div class="edition" role="group" aria-label="Rules edition">
+        <button type="button" data-edition="2014">2014<span class="long"> rules</span></button>
+        <button type="button" data-edition="2024">2024<span class="long"> rules</span></button>
+      </div>
+    </header>
+
+    <aside class="sidebar" id="sidebar" aria-label="Filters">
+      <div class="sidebar-head">
+        <h2>Filters</h2>
+        <button class="icon-btn" id="filters-close" type="button" aria-label="Close filters">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <nav class="facet" aria-labelledby="f-class">
+        <h3 id="f-class">Class</h3>
+        <ul id="classes"></ul>
+      </nav>
+      <div class="facet">
+        <h3><label for="char-level">Character level</label></h3>
+        <select id="char-level" class="facet-select">
+          <option value="">Any level</option>
+          <option value="1">Level 1</option><option value="2">Level 2</option><option value="3">Level 3</option><option value="4">Level 4</option>
+          <option value="5">Level 5</option><option value="6">Level 6</option><option value="7">Level 7</option><option value="8">Level 8</option>
+          <option value="9">Level 9</option><option value="10">Level 10</option><option value="11">Level 11</option><option value="12">Level 12</option>
+          <option value="13">Level 13</option><option value="14">Level 14</option><option value="15">Level 15</option><option value="16">Level 16</option>
+          <option value="17">Level 17</option><option value="18">Level 18</option><option value="19">Level 19</option><option value="20">Level 20</option>
+        </select>
+      </div>
+      <div class="facet" aria-labelledby="f-school">
+        <h3 id="f-school">School</h3>
+        <ul id="schools"></ul>
+      </div>
+      <div class="facet" aria-labelledby="f-cast">
+        <h3 id="f-cast">Casting</h3>
+        <ul id="flags"></ul>
+      </div>
+      <p class="credit" id="credit"></p>
+    </aside>
+
+    <main class="sheet" id="main">
+      <div class="title-row">
+        <div>
+          <h1 id="title">Spells</h1>
+          <p class="subline" id="subline"></p>
+        </div>
+        <div class="title-actions">
+          <label class="sort">
+            <span>Sort</span>
+            <select id="sort">
+              <option value="name">Name</option>
+              <option value="level">Spell level</option>
+              <option value="unlock">Character level</option>
+              <option value="school">School</option>
+            </select>
+          </label>
+          <div class="tabs" role="tablist" aria-label="View">
+            <button type="button" role="tab" data-view="table" id="tab-table" aria-controls="results">Table</button>
+            <button type="button" role="tab" data-view="cards" id="tab-cards" aria-controls="results">Cards</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="ladder" aria-labelledby="ladder-h">
+        <div class="ladder-head">
+          <h2 id="ladder-h">Spells by level</h2>
+          <button type="button" class="text-btn" id="clear-levels" hidden>Show every level</button>
+        </div>
+        <div class="ladder-bars" id="ladder"></div>
+      </section>
+
+      <section id="results" class="results" aria-live="polite" aria-labelledby="title"></section>
+    </main>
+  </div>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="drawer" id="drawer" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="d-name" hidden></aside>
+  <div class="peek" id="peek" role="tooltip" hidden></div>
+
+</body>
+</html>
