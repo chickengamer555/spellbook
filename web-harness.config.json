@@ -1,0 +1,6 @@
+{
+  "contractsDir": "verify",
+  "policy": "web-harness.policy.json",
+  "adapter": "dom",
+  "expectedFail": []
+}

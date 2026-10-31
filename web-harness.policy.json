@@ -1,0 +1,23 @@
+{
+  "tokenPrefix": "--",
+  "forbidRawIn": [
+    "color",
+    "background-color",
+    "font-size",
+    "margin",
+    "padding",
+    "gap",
+    "border-radius"
+  ],
+  "allowRawValues": [
+    "0",
+    "none",
+    "auto",
+    "inherit",
+    "transparent",
+    "currentColor",
+    "100%"
+  ],
+  "forbidImportant": true,
+  "maxInlineStyleDeclarations": 1
+}

@@ -1,0 +1,30 @@
+{
+  "unit": "Spellbook",
+  "title": "Spellbook (production build)",
+  "description": "The built site that GitHub Pages serves. It shows every SRD spell for the chosen edition, filters by the URL hash, opens a spell from a shared link, survives a junk link, never injects typed text as HTML, credits the SRD licence, and loads its assets from relative URLs so it works under /spellbook/.",
+  "kind": "page",
+  "domContract": { "unit": "spellbook", "attrs": ["edition", "count"] },
+  "fixtures": [
+    { "id": "default-2014", "description": "shared 2014 link: the full list", "props": { "hash": "ed=2014", "edition": "2014", "count": "319" } },
+    { "id": "edition-2024", "description": "shared 2024 link: the full list", "props": { "hash": "ed=2024", "edition": "2024", "count": "339" } },
+    { "id": "deep-link-spell", "description": "a link to one spell opens its drawer", "props": { "hash": "ed=2014&spell=fireball", "edition": "2014", "count": "319" } },
+    { "id": "pick-wizard", "description": "clicking the Wizard class narrows the list", "props": { "hash": "ed=2014", "edition": "2014", "count": "204" }, "act": true, "probe": true },
+    { "id": "no-results", "description": "a search that matches nothing must say so, not render blank", "props": { "hash": "ed=2014&q=zzzzqq", "edition": "2014", "count": "0" }, "probe": true },
+    { "id": "hostile-query", "description": "markup in the search term stays text", "props": { "hash": "ed=2014&q=%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E", "edition": "2014", "count": "0" }, "probe": true },
+    { "id": "junk-link", "description": "unknown values in every hash field fall back to defaults", "props": { "hash": "ed=1999&class=Nope&level=x&char=99&school=Nope&sort=hack&only=nope&spell=nope", "edition": "2014", "count": "319" }, "probe": true },
+    { "id": "prototype-link", "description": "Object.prototype names in the hash are not valid editions or flags", "props": { "hash": "ed=__proto__&only=constructor", "edition": "2014", "count": "319" }, "probe": true }
+  ],
+  "invariants": [
+    { "id": "edition-shown", "description": "the rendered edition is the expected one", "assertion": { "kind": "attr-equals", "selector": "[data-verify-edition]", "attr": "data-verify-edition", "fromProps": "edition" } },
+    { "id": "count-shown", "description": "the rendered spell count is the expected one", "assertion": { "kind": "attr-equals", "selector": "[data-verify-count]", "attr": "data-verify-count", "fromProps": "count" } },
+    { "id": "rows-match-count", "description": "the table holds exactly as many rows as the count claims", "code": true, "why_code": "relates a live element count to an attribute, which assertions cannot compare" },
+    { "id": "licence-credit", "description": "the CC BY 4.0 attribution is on the page", "assertion": { "kind": "text-matches", "selector": "#credit", "pattern": "Wizards of the Coast LLC.*CC BY 4\\.0" } },
+    { "id": "assets-relative", "description": "the built page references its JS and CSS by relative URL, so it loads under a Pages subpath", "code": true, "why_code": "reads dist/index.html from disk, which is not in the rendered DOM" },
+    { "id": "drawer-opens", "description": "the linked spell opens by name", "onlyFixtures": ["deep-link-spell"], "assertion": { "kind": "text-matches", "selector": "#d-name", "pattern": "^Fireball$" } },
+    { "id": "drawer-closed", "description": "a junk spell id leaves the drawer shut", "onlyFixtures": ["junk-link", "prototype-link", "default-2014"], "assertion": { "kind": "dom-present", "selector": "#drawer[hidden]", "min": 1, "max": 1 } },
+    { "id": "wizard-title", "description": "the heading names the picked class", "onlyFixtures": ["pick-wizard"], "assertion": { "kind": "text-matches", "selector": "#title", "pattern": "^Wizard spells$" } },
+    { "id": "empty-state", "description": "no results says so and offers a way out", "onlyFixtures": ["no-results", "hostile-query"], "assertion": { "kind": "dom-present", "selector": "#reset", "min": 1, "max": 1 } },
+    { "id": "query-not-injected", "description": "the search term is never parsed as markup", "onlyFixtures": ["hostile-query"], "assertion": { "kind": "dom-absent", "selector": "#subline img, #results img, img[src='x']" } },
+    { "id": "query-shown-as-text", "description": "the search term is echoed literally", "onlyFixtures": ["hostile-query"], "assertion": { "kind": "text-matches", "selector": "#subline", "pattern": "<img src=x onerror=alert\\(1\\)>" } }
+  ]
+}
